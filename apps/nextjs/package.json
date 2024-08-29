@@ -9,6 +9,11 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@auth0/nextjs-auth0": "^3.5.0",
+    "@web3auth/base": "^8.12.4",
+    "@web3auth/ethereum-provider": "^8.12.4",
+    "@web3auth/no-modal": "^8.12.4",
+    "@web3auth/openlogin-adapter": "^8.12.4",
     "next": "14.2.6",
     "react": "^18",
     "react-dom": "^18"
