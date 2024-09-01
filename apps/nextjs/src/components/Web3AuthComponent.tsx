@@ -123,7 +123,7 @@ const Web3AuthComponent: React.FC = () => {
 
       console.log('requestiong with token', user?.oAuthAccessToken); 
 
-      const response = await axios.get("/api/proxy/linkedin/v2/me", {
+      const response = await axios.get("/api/proxy/v2/me", {
         headers: {
           Authorization: `Bearer ${user?.oAuthAccessToken}`,
         },
