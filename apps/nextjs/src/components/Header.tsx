@@ -6,7 +6,7 @@ import { useAuth } from '../context/Web3AuthContext';
 
 const Header = () => {
   const router = useRouter();
-  const { connectToProvider, isConnected, logout } = useAuth();
+  const { connectToProvider, isConnected, logout, walletDetails } = useAuth();
 
   const navigateTo = (path: string) => {
     router.push(path);
@@ -33,7 +33,10 @@ const Header = () => {
             <button style={styles.tab} onClick={() => navigateTo('/explore')}>
                 Explore
             </button>
-            <button style={styles.connectButton} onClick={logout}>
+            <div style={styles.walletBalance}>
+              Balance: {walletDetails?.balance} Vault Tokens
+            </div>
+            <button style={styles.connectButton} onClick={handleLogout}>
                 Logout
             </button>
         </>
@@ -50,7 +53,7 @@ const Header = () => {
 
 const styles = {
   header: {
-    backgroundColor: '#f8f9fa',
+    backgroundColor: '#343a40',
     padding: '10px 20px',
     borderBottom: '1px solid #dee2e6',
   },
@@ -75,6 +78,11 @@ const styles = {
     cursor: 'pointer',
     color: '#fff',
     borderRadius: '5px',
+  },
+  walletBalance: {
+    padding: '10px 20px',
+    fontSize: '16px',
+    color: '#28a745',
   },
 };
 
