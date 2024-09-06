@@ -1,0 +1,27 @@
+/* ExplorePage.module.css */
+.explorepage {
+    padding: 20px;
+    color: white; /* Set text color to white */
+  }
+  
+  .searchbar {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    font-size: 16px;
+    color: black; /* Ensure the text inside the search bar is readable */
+  }
+  
+  .companylist {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .companycard {
+    width: 100%;
+    box-sizing: border-box;
+    background-color: #333; /* Optional: Set a background color for better contrast */
+    padding: 20px;
+    border-radius: 8px;
+  }

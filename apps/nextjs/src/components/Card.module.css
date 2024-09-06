@@ -1,0 +1,33 @@
+.card {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
+    width: 300px;
+    margin: 10px;
+  }
+  
+  .card:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  .cardImage img {
+    width: 100%;
+    height: auto;
+  }
+  
+  .cardContent {
+    padding: 16px;
+  }
+  
+  .cardTitle {
+    font-size: 1.2rem;
+    margin-bottom: 8px;
+  }
+  
+  .cardDescription {
+    font-size: 1rem;
+    color: #666;
+  }
+  

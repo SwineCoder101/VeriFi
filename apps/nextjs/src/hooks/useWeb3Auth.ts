@@ -205,6 +205,21 @@ const useWeb3Auth = () => {
     return { address, balance };
   }
 
+  const withdrawFunds = async (amount: string, to: string ) => {
+    if (!web3auth || !provider) return null;
+    const web3 = new Web3(provider as any);
+    const fromAddress = (await web3.eth.getAccounts())[0];
+    const tx = {
+      from: fromAddress,
+      to: to,
+      value: web3.utils.toWei(amount, "ether"),
+    };
+    const signedTx = await web3.eth.accounts.signTransaction(tx, process.env.NEXT_PUBLIC_PRIVATE_KEY as string);
+    const receipt = await web3.eth.sendSignedTransaction(signedTx.rawTransaction as string);
+    console.log(receipt);
+    return receipt;
+  };
+
 
   return {
     connectToProvider,
@@ -219,6 +234,7 @@ const useWeb3Auth = () => {
     walletDetails,
     provider,
     setWalletDetails,
+    withdrawFunds,
   };
 };
 

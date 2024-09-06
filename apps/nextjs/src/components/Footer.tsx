@@ -2,7 +2,7 @@ import React, { CSSProperties } from 'react';
 
 const Footer = () => {
   const footerStyle: CSSProperties = {
-    backgroundColor: '#f8f9fa',
+    backgroundColor: '#343a40',
     padding: '10px 20px',
     borderTop: '1px solid #dee2e6',
     textAlign: 'center',

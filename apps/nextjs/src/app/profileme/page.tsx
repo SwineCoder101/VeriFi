@@ -1,12 +1,13 @@
 "use client"; // Add this directive at the top
 
+import Card from '@/components/Card';
 import { useAuth } from '@/context/Web3AuthContext';
 import { OpenloginUserInfo } from '@web3auth/openlogin-adapter';
-import { use, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 const ProfileMe = () => {
-  const { userInfo, isConnected, walletDetails, getBalance, getAccounts, setWalletDetails } = useAuth();
-
+  const { userInfo, isConnected, walletDetails, getBalance, getAccounts, setWalletDetails, withdrawFunds } = useAuth();
+  const [withdrawAmount, setWithdrawAmount] = useState('');
 
   useEffect(() => {
     const fetchWalletDetails = async () => {
@@ -18,9 +19,15 @@ const ProfileMe = () => {
     };
 
     fetchWalletDetails();
-  }, [isConnected, walletDetails]);
+  }, [isConnected, walletDetails, getBalance, getAccounts, setWalletDetails]);
 
-
+  const handleWithdraw = async () => {
+    if (withdrawAmount && parseFloat(withdrawAmount) > 0) {
+      await withdrawFunds(withdrawAmount);
+      const balance = await getBalance();
+      setWalletDetails({ ...walletDetails, balance: balance || '0' });
+    }
+  };
 
   const getLinkedinProfileMock = (userInfo: Partial<OpenloginUserInfo>) => {
     return {
@@ -36,32 +43,43 @@ const ProfileMe = () => {
 
   return (
     <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
-      <h1>Profile Me</h1>
-        <>
-          <div>
-            <h2>User Information</h2>
-            {isConnected ? (
+      <Card title="Profile" description="Here is your VeriFi Profile, add more reviews comments to boost your reputation and score! The higher the score the more Vault Tokens you have.">
+        <div>
+          {isConnected ? (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
               <div>
                 <p><strong>Name:</strong> {userInfo?.name}</p>
-                <p><strong>Email:</strong> {userInfo?.email}</p>
+                <p><strong>Email:</strong> {userInfo?.email || "profileemail@gmail.com"}</p>
                 <img src={userInfo?.profileImage} alt="Profile" width={100} />
               </div>
-            ) : (
-              <p>Loading user info...</p>
-            )}
-          </div>
-          <div>
-            <h2>Wallet Information</h2>
-            {isConnected ? (
+            </div>
+          ) : (
+            <p>Loading user info...</p>
+          )}
+        </div>
+      </Card>
+      <Card title="Wallet" description="Deposit and Withdraw funds">
+        <div>
+          {isConnected ? (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
               <div>
-                <p><strong>Wallet Address: </strong> {walletDetails?.address}</p>
-                <p><strong>Balance: </strong> {walletDetails?.balance }</p>
+                <p><strong>Wallet Address:</strong> {walletDetails?.address || "0x71a7a28488E39717c0ECcAEF15Ed62A47A55C44d"}</p>
+                <p><strong>Balance:</strong> {walletDetails?.balance}</p>
+                <input
+                  type="number"
+                  value={withdrawAmount}
+                  onChange={(e) => setWithdrawAmount(e.target.value)}
+                  placeholder="Amount to withdraw"
+                  style={{ marginRight: '10px' }}
+                />
+                <button onClick={handleWithdraw}>Withdraw</button>
               </div>
-            ) : (
-              <p>Loading LinkedIn profile...</p>
-            )}
-          </div>
-        </>
+            </div>
+          ) : (
+            <p>Loading wallet info...</p>
+          )}
+        </div>
+      </Card>
     </div>
   );
 };
