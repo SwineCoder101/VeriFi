@@ -1,0 +1,28 @@
+.cardContainer {
+    margin-top: 20px; /* Adjust the value as needed */
+  }
+  
+  .cardContent {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    padding: 16px;
+  }
+  
+  .column {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .cardContent p {
+    margin: 8px 0;
+  }
+  
+  .cardContent a {
+    color: #007bff;
+    text-decoration: none;
+  }
+  
+  .cardContent a:hover {
+    text-decoration: underline;
+  }

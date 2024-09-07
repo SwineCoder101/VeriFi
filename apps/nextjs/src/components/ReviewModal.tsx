@@ -5,9 +5,10 @@ interface ReviewModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSubmit: (formData: ReviewFormData) => void;
+  companyNameInput?: string;
 }
 
-interface ReviewFormData {
+export interface ReviewFormData {
   companyName: string;
   location: string;
   department: string;
@@ -19,7 +20,7 @@ interface ReviewFormData {
   cons: string;
 }
 
-const ReviewModal: React.FC<ReviewModalProps> = ({ isOpen, onClose, onSubmit }) => {
+const ReviewModal: React.FC<ReviewModalProps> = ({ isOpen, onClose, onSubmit, companyNameInput }) => {
   const [formData, setFormData] = useState<ReviewFormData>({
     companyName: '',
     location: '',
@@ -78,7 +79,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({ isOpen, onClose, onSubmit }) 
               type="text"
               id="companyName"
               name="companyName"
-              value={formData.companyName}
+              value={companyNameInput || formData.companyName}
               onChange={handleChange}
               required
             />

@@ -2,8 +2,11 @@
 
 import { useParams, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import CommentCard from '../../../components/CommentCard'; // Import CommentCard component
-import globalStyle from '../../globals.module.css'; // Import global styles
+import OverviewCard from '../../../components/OverviewCard';
+import ReviewModal, { ReviewFormData } from '../../../components/ReviewModal';
+import ReviewCard, { ReviewCardData } from '../../../components/ReviewCard';
+import globalStyle from '../../global.module.css';
+import Card from '@/components/Card';
 
 const CompanyProfile = () => {
   const params = useParams();
@@ -15,6 +18,14 @@ const CompanyProfile = () => {
   const headquarters = searchParams.get('headquarters');
   const description = searchParams.get('description') || 'No description available.';
   const comments = JSON.parse(searchParams.get('comments') ?? '[]');
+  const website = searchParams.get('website');
+  const employees = searchParams.get('employees');
+  const sector = searchParams.get('sector');
+  const revenue = searchParams.get('revenue');
+  const competitors = searchParams.get('competitors');
+  const locations = searchParams.get('locations');
+  const foundingDate = searchParams.get('foundingDate');
+  const investments = searchParams.get('investments');
 
   const [companyData, setCompanyData] = useState({
     name: '',
@@ -23,9 +34,18 @@ const CompanyProfile = () => {
     headquarters: '',
     description: '',
     comments: [] as string[],
+    website: '',
+    employees: '',
+    sector: '',
+    revenue: '',
+    competitors: '',
+    locations: '',
+    foundingDate: '',
+    investments: '',
   });
 
-  const [newComment, setNewComment] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [reviews, setReviews] = useState<ReviewCardData[]>([]);
 
   useEffect(() => {
     const newCompanyData = {
@@ -35,58 +55,53 @@ const CompanyProfile = () => {
       headquarters: headquarters as string,
       description: description as string,
       comments: comments as string[],
+      website: website as string,
+      employees: employees as string,
+      sector: sector as string,
+      revenue: revenue as string,
+      competitors: competitors as string,
+      locations: locations as string,
+      foundingDate: foundingDate as string,
+      investments: investments as string,
     };
 
     // Only update state if the new data is different from the current state
     if (JSON.stringify(newCompanyData) !== JSON.stringify(companyData)) {
       setCompanyData(newCompanyData);
     }
-  }, [name, ratings, views, headquarters, description, comments, companyData]);
+  }, [name, ratings, views, headquarters, description, comments, website, employees, sector, revenue, competitors, locations, foundingDate, investments, companyData]);
 
-  const handleCommentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNewComment(e.target.value);
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
   };
 
-  const handleCommentSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (newComment.trim()) {
-      setCompanyData((prevData) => ({
-        ...prevData,
-        comments: [...prevData.comments, newComment],
-      }));
-      setNewComment('');
-    }
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleReviewSubmit = (formData: ReviewFormData) => {
+    const newReview: ReviewCardData = {
+      walletAddress: '0x1234567890abcdef', // Replace with actual wallet address if available
+      review: formData,
+      timestamp: new Date().toISOString(),
+    };
+    setReviews((prevReviews) => [...prevReviews, newReview]);
+    setIsModalOpen(false);
   };
 
   return (
-    <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
-      <h1>Company Profile: {companyData.name}</h1>
+    <div className={globalStyle.container}>
+      <OverviewCard companyData={companyData} />
+      {isModalOpen && <ReviewModal isOpen={isModalOpen} onClose={handleCloseModal} onSubmit={handleReviewSubmit} />}
       <div>
-        <p><strong>Ratings:</strong> {companyData.ratings}</p>
-        <p><strong>Views:</strong> {companyData.views}</p>
-        <p><strong>Headquarters:</strong> {companyData.headquarters}</p>
-        <p><strong>Description:</strong> {companyData.description}</p>
-      </div>
-      <div>
-        <h2>Comments</h2>
-        {companyData.comments.length > 0 ? (
-          <div>
-            {companyData.comments.map((comment, index) => (
-              <CommentCard key={index} comment={comment} />
-            ))}
-          </div>
-        ) : (
-          <p>No comments available.</p>
-        )}
-        <form onSubmit={handleCommentSubmit} style={{ marginTop: '20px' }}>
-          <input
-            type="text"
-            value={newComment}
-            onChange={handleCommentChange}
-            placeholder="Enter your comment"
-          />
-          <button type="submit" style={{ padding: '10px 20px' }}>Submit</button>
-        </form>
+        <Card title={'Reviews'} description={''}>
+          <button onClick={handleOpenModal} style={{ padding: '10px 20px', fontSize: '18px', borderRadius: '4px', border: 'none', backgroundColor: '#28a745', color: '#fff', margin: '20px 0' }}>
+            Add Review
+          </button>
+          {reviews.map((review, index) => (
+            <ReviewCard key={index} {...review} />
+          ))}
+        </Card>
       </div>
     </div>
   );
