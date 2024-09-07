@@ -3,6 +3,7 @@
 import { useParams, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import CommentCard from '../../../components/CommentCard'; // Import CommentCard component
+import globalStyle from '../../globals.module.css'; // Import global styles
 
 const CompanyProfile = () => {
   const params = useParams();
@@ -83,7 +84,6 @@ const CompanyProfile = () => {
             value={newComment}
             onChange={handleCommentChange}
             placeholder="Enter your comment"
-            style={{ padding: '10px', width: '300px', marginRight: '10px' }}
           />
           <button type="submit" style={{ padding: '10px 20px' }}>Submit</button>
         </form>

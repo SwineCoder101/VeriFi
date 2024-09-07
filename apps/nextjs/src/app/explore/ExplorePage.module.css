@@ -1,5 +1,5 @@
 /* ExplorePage.module.css */
-.explorepage {
+  .explorepage {
     padding: 20px;
     color: white; /* Set text color to white */
   }
@@ -10,6 +10,22 @@
     margin-bottom: 20px;
     font-size: 16px;
     color: black; /* Ensure the text inside the search bar is readable */
+  }
+
+  .postReviewButton {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 4px;
+    border: none;
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+    margin-bottom: 20px;
+  }
+
+  .postReviewButton:active {
+    background-color: #0056b3; /* Change color when button is held */
   }
   
   .companylist {

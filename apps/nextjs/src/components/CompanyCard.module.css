@@ -1,31 +1,58 @@
-.companyCard {
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: box-shadow 0.3s ease;
-    width: 300px;
-    margin: 10px;
+/* CompanyCard.module.css */
+.cardContent {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
   }
   
-  .companyCard:hover {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  .icon {
+    width: 50px;
+    height: 50px;
+    margin-right: 20px;
   }
   
-  .companyCardContent {
-    padding: 16px;
+  .details {
+    flex: 1;
   }
   
-  .companyName {
-    font-size: 1.2rem;
-    margin-bottom: 8px;
+  .name {
+    font-size: 20px;
+    font-weight: bold;
+    margin: 0;
   }
   
-  .companyDetails {
-    margin-top: 12px;
+  .location,
+  .size,
+  .industry {
+    margin: 5px 0;
   }
   
-  .companyDetails p {
-    margin: 4px 0;
+  .stats {
+    display: flex;
+    gap: 10px;
+    margin: 10px 0;
   }
   
+  .proCon {
+    margin: 10px 0;
+  }
+  
+  .pro {
+    color: green;
+  }
+  
+  .con {
+    color: red;
+  }
+  
+  .rating {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-weight: bold;
+    color: #007bff;
+    background-color: #fff;
+    padding: 5px 10px;
+    border-radius: 4px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  }

@@ -1,0 +1,18 @@
+/* global.module.css */
+.textfield {
+  margin-right: 10px;
+  padding: 5px;
+  font-size: 16px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  color: black;
+}
+
+.withdrawButton {
+  padding: 5px 10px;
+  font-size: 16px;
+  border-radius: 4px;
+  border: none;
+  background-color: #007bff;
+  color: #fff;
+}

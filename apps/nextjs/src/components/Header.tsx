@@ -34,7 +34,10 @@ const Header = () => {
                 Explore
             </button>
             <div style={styles.walletBalance}>
-              Balance: {walletDetails?.balance} Vault Tokens
+              Vault: {walletDetails?.balance} USDC
+            </div>
+            <div style={styles.walletBalance}>
+              Wallet: {walletDetails?.balance} USDC
             </div>
             <button style={styles.connectButton} onClick={handleLogout}>
                 Logout

@@ -1,4 +1,4 @@
-"use client"; // Add this directive at the top
+"use client"; 
 
 import Card from '@/components/Card';
 import { useAuth } from '@/context/Web3AuthContext';
@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react';
 const ProfileMe = () => {
   const { userInfo, isConnected, walletDetails, getBalance, getAccounts, setWalletDetails, withdrawFunds } = useAuth();
   const [withdrawAmount, setWithdrawAmount] = useState('');
+  const [withdrawAddress, setWithdrawAddress] = useState('');
 
   useEffect(() => {
     const fetchWalletDetails = async () => {
@@ -23,10 +24,13 @@ const ProfileMe = () => {
 
   const handleWithdraw = async () => {
     if (withdrawAmount && parseFloat(withdrawAmount) > 0) {
-      await withdrawFunds(withdrawAmount);
-      const balance = await getBalance();
-      setWalletDetails({ ...walletDetails, balance: balance || '0' });
+      await withdrawFunds(withdrawAmount, withdrawAddress);
     }
+  };
+
+  const handleWithdrawOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setWithdrawAmount(e.target.value);
+    setWithdrawAddress(walletDetails?.address || '');
   };
 
   const getLinkedinProfileMock = (userInfo: Partial<OpenloginUserInfo>) => {
@@ -41,6 +45,12 @@ const ProfileMe = () => {
     };
   };
 
+  const maskname = (name: string | undefined) => {
+    if (!name) return '';
+    const nameArray = name.split(' ');
+    return `${nameArray[0]} ${nameArray[1].charAt(0)}.`;
+  }
+
   return (
     <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
       <Card title="Profile" description="Here is your VeriFi Profile, add more reviews comments to boost your reputation and score! The higher the score the more Vault Tokens you have.">
@@ -48,7 +58,7 @@ const ProfileMe = () => {
           {isConnected ? (
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
               <div>
-                <p><strong>Name:</strong> {userInfo?.name}</p>
+                <p><strong>Name:</strong> {maskname(userInfo?.name)}</p>
                 <p><strong>Email:</strong> {userInfo?.email || "profileemail@gmail.com"}</p>
                 <img src={userInfo?.profileImage} alt="Profile" width={100} />
               </div>
@@ -64,15 +74,20 @@ const ProfileMe = () => {
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
               <div>
                 <p><strong>Wallet Address:</strong> {walletDetails?.address || "0x71a7a28488E39717c0ECcAEF15Ed62A47A55C44d"}</p>
-                <p><strong>Balance:</strong> {walletDetails?.balance}</p>
+                <p><strong>Vault Balance:</strong> {walletDetails?.balance} USDC</p>
+                <p><strong>Token Balance:</strong> {walletDetails?.balance} VV</p>
+                <p><strong>% Share: </strong> {walletDetails?.balance} %</p>
+                <p><strong>USDC Balance: </strong> {walletDetails?.balance} USDC</p>
                 <input
                   type="number"
                   value={withdrawAmount}
-                  onChange={(e) => setWithdrawAmount(e.target.value)}
+                  onChange={handleWithdrawOnChange}
                   placeholder="Amount to withdraw"
-                  style={{ marginRight: '10px' }}
+                  style={{ marginRight: '10px', padding: '5px', fontSize: '16px', borderRadius: '4px', border: '1px solid #ccc', color: 'black' }}
                 />
-                <button onClick={handleWithdraw}>Withdraw</button>
+                <button onClick={handleWithdraw} style={{ padding: '5px 10px', fontSize: '16px', borderRadius: '4px', border: 'none', backgroundColor: '#007bff', color: '#fff' }}>
+                  Withdraw
+                </button>
               </div>
             </div>
           ) : (
