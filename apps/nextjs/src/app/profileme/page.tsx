@@ -4,6 +4,7 @@ import Card from '@/components/Card';
 import { useAuth } from '@/context/Web3AuthContext';
 import { OpenloginUserInfo } from '@web3auth/openlogin-adapter';
 import { useEffect, useState } from 'react';
+import { User, Mail, Wallet, DollarSign, Percent, CreditCard } from "lucide-react";
 
 const ProfileMe = () => {
   const { userInfo, isConnected, walletDetails, getBalance, getAccounts, setWalletDetails, withdrawFunds } = useAuth();
@@ -53,48 +54,71 @@ const ProfileMe = () => {
 
   return (
     <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
-      <Card title="Profile" description="Here is your VeriFi Profile, add more reviews comments to boost your reputation and score! The higher the score the more Vault Tokens you have.">
-        <div>
-          {isConnected ? (
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
-              <div>
-                <p><strong>Name:</strong> {maskname(userInfo?.name)}</p>
-                <p><strong>Email:</strong> {userInfo?.email || "profileemail@gmail.com"}</p>
-                <img src={userInfo?.profileImage} alt="Profile" width={100} />
-              </div>
+      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <div style={{ width: '48%', marginRight: '2%' }}>
+          <Card title="Profile" description="Here is your VeriFi Profile, add more reviews comments to boost your reputation and score! The higher the score the more Vault Tokens you have.">
+            <div>
+              {isConnected ? (
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center', fontSize: '16px', marginBottom: '10px' }}>
+                    <User style={{ marginRight: '5px' }} />
+                    <p><strong>Name:</strong> {maskname(userInfo?.name)}</p>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', fontSize: '16px', marginBottom: '10px' }}>
+                    <Mail style={{ marginRight: '5px' }} />
+                    <p><strong>Email:</strong> {userInfo?.email || "profileemail@gmail.com"}</p>
+                  </div>
+                  <img src={userInfo?.profileImage} alt="Profile" width={100} style={{ marginBottom: '10px' }} />
+                </div>
+              ) : (
+                <p>Loading user info...</p>
+              )}
             </div>
-          ) : (
-            <p>Loading user info...</p>
-          )}
+          </Card>
         </div>
-      </Card>
-      <Card title="Wallet" description="Deposit and Withdraw funds">
-        <div>
-          {isConnected ? (
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
-              <div>
-                <p><strong>Wallet Address:</strong> {walletDetails?.address || "0x71a7a28488E39717c0ECcAEF15Ed62A47A55C44d"}</p>
-                <p><strong>Vault Balance:</strong> {walletDetails?.balance} USDC</p>
-                <p><strong>Token Balance:</strong> {walletDetails?.balance} VV</p>
-                <p><strong>% Share: </strong> {walletDetails?.balance} %</p>
-                <p><strong>USDC Balance: </strong> {walletDetails?.balance} USDC</p>
-                <input
-                  type="number"
-                  value={withdrawAmount}
-                  onChange={handleWithdrawOnChange}
-                  placeholder="Amount to withdraw"
-                  style={{ marginRight: '10px', padding: '5px', fontSize: '16px', borderRadius: '4px', border: '1px solid #ccc', color: 'black' }}
-                />
-                <button onClick={handleWithdraw} style={{ padding: '5px 10px', fontSize: '16px', borderRadius: '4px', border: 'none', backgroundColor: '#007bff', color: '#fff' }}>
-                  Withdraw
-                </button>
-              </div>
+        <div style={{ width: '48%', marginLeft: '2%' }}>
+          <Card title="Wallet" description="Deposit and Withdraw funds">
+            <div>
+              {isConnected ? (
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center', fontSize: '16px', marginBottom: '10px' }}>
+                    <Wallet style={{ marginRight: '5px' }} />
+                    <p><strong>Wallet Address:</strong> {walletDetails?.address || "0x71a7a28488E39717c0ECcAEF15Ed62A47A55C44d"}</p>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', fontSize: '16px', marginBottom: '10px' }}>
+                    <DollarSign style={{ marginRight: '5px' }} />
+                    <p><strong>Vault Balance:</strong> {walletDetails?.balance} USDC</p>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', fontSize: '16px', marginBottom: '10px' }}>
+                    <CreditCard style={{ marginRight: '5px' }} />
+                    <p><strong>Token Balance:</strong> {walletDetails?.balance} VV</p>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', fontSize: '16px', marginBottom: '10px' }}>
+                    <Percent style={{ marginRight: '5px' }} />
+                    <p><strong>Share:</strong> {walletDetails?.balance}</p>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', fontSize: '16px', marginBottom: '10px' }}>
+                    <DollarSign style={{ marginRight: '5px' }} />
+                    <p><strong>USDC Balance:</strong> {walletDetails?.balance} USDC</p>
+                  </div>
+                  <input
+                    type="number"
+                    value={withdrawAmount}
+                    onChange={handleWithdrawOnChange}
+                    placeholder="Amount to withdraw"
+                    style={{ marginRight: '10px', padding: '5px', fontSize: '16px', borderRadius: '4px', border: '1px solid #ccc', color: 'black', marginBottom: '10px' }}
+                  />
+                  <button onClick={handleWithdraw} style={{ padding: '5px 10px', fontSize: '16px', borderRadius: '4px', border: 'none', backgroundColor: '#007bff', color: '#fff' }}>
+                    Withdraw
+                  </button>
+                </div>
+              ) : (
+                <p>Loading wallet info...</p>
+              )}
             </div>
-          ) : (
-            <p>Loading wallet info...</p>
-          )}
+          </Card>
         </div>
-      </Card>
+      </div>
     </div>
   );
 };

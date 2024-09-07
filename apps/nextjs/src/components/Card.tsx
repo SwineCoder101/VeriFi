@@ -5,11 +5,12 @@ interface CardProps {
   title: string;
   description: string;
   children: React.ReactNode;
+  className?: string;
 }
 
-const Card: React.FC<CardProps> = ({ title, description, children }) => {
+const Card: React.FC<CardProps> = ({ title, description, children, className }) => {
   return (
-    <div style={styles.card}>
+    <div style={styles.card} className={className}>
       <h2 style={styles.title}>{title}</h2>
       <p>{description}</p>
       <div>{children}</div>
