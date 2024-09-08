@@ -1,0 +1,22 @@
+[
+    {
+      "name": "nullifier",
+      "type": "bytes32"
+    },
+    {
+      "name": "type",
+      "type": "string"
+    },
+    {
+      "name": "signer",
+      "type": "address"
+    },
+    {
+      "name": "companyReviewId",
+      "type": "uint256"
+    },
+    {
+      "name": "companyId",
+      "type": "uint256"
+    }
+]

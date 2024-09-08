@@ -17,6 +17,7 @@ interface AuthContextType {
   walletDetails: WalletDetails | undefined;
   setWalletDetails: React.Dispatch<React.SetStateAction<WalletDetails | undefined>>;
   withdrawFunds: (amount: string, to: string) => Promise<any>;
+  signClient: any;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -39,10 +40,11 @@ export const Web3AuthContext: React.FC<Web3AuthContextProps> = ({ children }) =>
     walletDetails,
     setWalletDetails,
     withdrawFunds,
+    signClient,
   } = useWeb3Auth();
 
   return (
-      <AuthContext.Provider value={{ isConnected, connectToProvider, logout, getUserInfo, getBalance, signMessage, getLinkedinProfile, userInfo, getAccounts,walletDetails, setWalletDetails, withdrawFunds }}>
+      <AuthContext.Provider value={{ isConnected, connectToProvider, logout, getUserInfo, getBalance, signMessage, getLinkedinProfile, userInfo, getAccounts,walletDetails, setWalletDetails, withdrawFunds, signClient }}>
         {children}
       </AuthContext.Provider>
     );
