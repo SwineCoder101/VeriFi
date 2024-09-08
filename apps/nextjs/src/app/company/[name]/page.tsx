@@ -7,10 +7,15 @@ import ReviewModal, { ReviewFormData } from '../../../components/ReviewModal';
 import ReviewCard, { ReviewCardData } from '../../../components/ReviewCard';
 import globalStyle from '../../global.module.css';
 import Card from '@/components/Card';
+import useWeb3Auth from '@/hooks/useWeb3Auth';
+import { useAuth } from '@/context/Web3AuthContext';
+import { useSignAttestation } from '@/hooks/useSignAttestation';
 
 const CompanyProfile = () => {
   const params = useParams();
   const searchParams = useSearchParams();
+  const {signClient, walletDetails} = useAuth();
+  const {createAttestation, getAttestation} = useSignAttestation();
 
   const name = params.name;
   const ratings = searchParams.get('ratings');
@@ -81,7 +86,7 @@ const CompanyProfile = () => {
 
   const handleReviewSubmit = (formData: ReviewFormData) => {
     const newReview: ReviewCardData = {
-      walletAddress: '0x1234567890abcdef', // Replace with actual wallet address if available
+      walletAddress: walletDetails?.address || '', // Replace with actual wallet address if available
       review: formData,
       timestamp: new Date().toISOString(),
     };
@@ -92,7 +97,7 @@ const CompanyProfile = () => {
   return (
     <div className={globalStyle.container}>
       <OverviewCard companyData={companyData} />
-      {isModalOpen && <ReviewModal isOpen={isModalOpen} onClose={handleCloseModal} onSubmit={handleReviewSubmit} />}
+      {isModalOpen && <ReviewModal isOpen={isModalOpen} onClose={handleCloseModal} onSubmit={handleReviewSubmit} createAttestation={createAttestation} />}
       <div>
         <Card title={'Reviews'} description={''}>
           <button onClick={handleOpenModal} style={{ padding: '10px 20px', fontSize: '18px', borderRadius: '4px', border: 'none', backgroundColor: '#28a745', color: '#fff', margin: '20px 0' }}>

@@ -1,11 +1,18 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styles from './ReviewModal.module.css';
+import { useAuth } from '@/context/Web3AuthContext';
+import { SCHEMA_ID, useSignAttestation } from '@/hooks/useSignAttestation';
+import { Attestation } from '@ethsign/sp-sdk';
+import { stringToBytes } from 'viem';
+import { UserInfo } from '@web3auth/base';
+import { WalletDetails } from '@/hooks/useWeb3Auth';
 
 interface ReviewModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSubmit: (formData: ReviewFormData) => void;
   companyNameInput?: string;
+  createAttestation: (review: ReviewFormData) => void;
 }
 
 export interface ReviewFormData {
@@ -21,6 +28,8 @@ export interface ReviewFormData {
 }
 
 const ReviewModal: React.FC<ReviewModalProps> = ({ isOpen, onClose, onSubmit, companyNameInput }) => {
+  const {signClient, userInfo, walletDetails} = useAuth();
+  const {createAttestation , getAttestation} = useSignAttestation();
   const [formData, setFormData] = useState<ReviewFormData>({
     companyName: '',
     location: '',
@@ -46,6 +55,9 @@ const ReviewModal: React.FC<ReviewModalProps> = ({ isOpen, onClose, onSubmit, co
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSubmit(formData);
+    const attestation: Attestation = formDataToAttestation(formData, userInfo, walletDetails?.address || '');
+    const response = createAttestation(signClient, attestation);
+    console.log(response);
     onClose();
   };
 
@@ -189,3 +201,45 @@ const ReviewModal: React.FC<ReviewModalProps> = ({ isOpen, onClose, onSubmit, co
 };
 
 export default ReviewModal;
+
+// [
+//     {
+//       "name": "nullifier",
+//       "type": "bytes32"
+//     },
+//     {
+//       "name": "type",
+//       "type": "string"
+//     },
+//     {
+//       "name": "signer",
+//       "type": "address"
+//     },
+//     {
+//       "name": "companyReviewId",
+//       "type": "uint256"
+//     },
+//     {
+//       "name": "companyId",
+//       "type": "uint256"
+//     }
+// ]
+
+function formDataToAttestation(formData: ReviewFormData, userInfo: Partial<UserInfo | null>, walletAddress: string): Attestation {
+    return {
+        schemaId: SCHEMA_ID,
+        indexingValues: '',
+        data: {
+            nullifier: stringToBytes(`${userInfo?.name}${Date.now()}${walletAddress}`),
+            type: 'companyReview',
+            signer: walletAddress || '',
+            companyReviewId: getNextReviewId(),
+            companyId: 0,
+        },
+    } as unknown as Attestation;
+}
+
+function getNextReviewId(): number {
+    return Math.floor(Math.random() * 1000000);
+}
+

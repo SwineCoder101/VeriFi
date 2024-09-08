@@ -7,6 +7,8 @@ import { EthereumPrivateKeyProvider } from "@web3auth/ethereum-provider";
 import { ADAPTER_EVENTS, CHAIN_NAMESPACES, IProvider, WALLET_ADAPTERS } from "@web3auth/base";
 import Web3 from "web3";
 import axios from 'axios';
+import { EvmChains, SignProtocolClient, SpMode } from '@ethsign/sp-sdk';
+import { privateKeyToAccount } from "viem/accounts";
 
 const clientId = "BNCvQyULuzhMGwxZpWfXWU2O72CAkYmCm63jqoolVeHdohBOoPymZgalUjx2K9pV0PR_bBPm47yiwdUC5ff4iv8";
 
@@ -47,6 +49,7 @@ const useWeb3Auth = () => {
   const [provider, setProvider] = useState<IProvider | null>(null);
   const [userInfo, setUserInfo] = useState<Partial<AuthData> | null>(null);
   const [walletDetails, setWalletDetails] = useState<WalletDetails>();
+  const [signClient, setSignClient] = useState<any>();
 
   useEffect(() => {
     const initializeWeb3Auth = async () => {
@@ -109,7 +112,18 @@ const useWeb3Auth = () => {
 
     };
 
+    const initializeSignClient = async () => {
+      const privateKey = `0x${process.env.NEXT_PUBLIC_PRIVATE_KEY}` as `0x${string}`;
+      const client = new SignProtocolClient(SpMode.OnChain, {
+        chain: EvmChains.baseSepolia,
+        account: privateKeyToAccount(privateKey),
+      });
+      setSignClient(client);
+    };
+
+    initializeSignClient();
     initializeWeb3Auth();
+
   }, []);
 
   const connectToProvider = async (providerName: "google" | "linkedin" | "github" | "twitter") => {
@@ -183,7 +197,6 @@ const useWeb3Auth = () => {
     const web3 = new Web3(provider as any);
     const fromAddress = (await web3.eth.getAccounts())[0];
     const signedMessage = await web3.eth.personal.sign(message, fromAddress, "");
-    console.log(signedMessage);
     return signedMessage;
   };
 
@@ -195,14 +208,33 @@ const useWeb3Auth = () => {
     return address
   };
 
+  const erc20ABI = [
+    {
+      "constant": true,
+      "inputs": [{"name": "_owner", "type": "address"}],
+      "name": "balanceOf",
+      "outputs": [{"name": "balance", "type": "uint256"}],
+      "type": "function"
+    }
+  ];
+
   const getWalletDetails = async () => {
     if (!web3auth || !provider) return null;
-    const web3 = new Web3(provider as any);
-    const address = (await web3.eth.getAccounts())[0];
-    const balance = web3.utils.fromWei(await web3.eth.getBalance(address), "ether");
-    console.log(address, balance);
+    try{
 
-    return { address, balance };
+      const web3 = new Web3(provider as any);
+      console.log("getting wallet details");
+      const address = (await web3.eth.getAccounts())[0];
+      const balance = web3.utils.fromWei(await web3.eth.getBalance(address), "ether");
+      
+      // const tokenBalance = await web3.eth.call({
+        console.log(address, balance);
+        return { address, balance };
+      } catch (error) {
+        console.error("Failed to get wallet details", error);
+        return null;
+      }
+
   }
 
   const withdrawFunds = async (amount: string, to: string ) => {
@@ -235,6 +267,7 @@ const useWeb3Auth = () => {
     provider,
     setWalletDetails,
     withdrawFunds,
+    signClient,
   };
 };
 
